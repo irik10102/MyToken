@@ -5,6 +5,7 @@ import {Test, console} from 'forge-std/Test.sol';
 import {MyToken} from 'src/MyToken.sol';
 
 import {DeployMyToken} from 'script/DeployMyToken.s.sol';
+import {Vm} from 'forge-std/Vm.sol';
 
 
  
@@ -35,7 +36,7 @@ contract TestMyToken is Test {
 
     function testTotalSupply() external{
 
-        assertEq(10000*(10**myToken.decimals()), myToken.totalSupply());
+        assertEq(1000*(10**myToken.decimals()), myToken.totalSupply());
         assertEq(myToken.balanceOf(myToken.getDefaultAccountAddress()), myToken.totalSupply());
     }
 
@@ -46,7 +47,7 @@ contract TestMyToken is Test {
         console.log('The msg.sender now is:', address(msg.sender));
         console.log('The address(this) now is:', address(this));
         console.log('The address of the MyToken.sol contract is:', address(myToken));
-        console.log('The address of the defaultAccount:', defaultAccount);
+        console.log('The address of the defaultAccount:', defaultSender);
 
         vm.startPrank(defaultSender);
 
@@ -75,16 +76,38 @@ contract TestMyToken is Test {
     function testAllowance() external{
         //ARRANGE
         vm.prank(defaultSender);
-        vm.approve(alice, )
 
+        vm.recordLogs();
 
         //ACT
+        //Allowance event is triggered
+        myToken.approve(alice, TRANSFER_AMOUNT); 
+        
+        assert(myToken.allowance(defaultSender, alice)==TRANSFER_AMOUNT);
 
+        //Transfer event is triggered
+        vm.prank(alice);
+        myToken.transferFrom(defaultSender, bob, SPEND_AMOUNT); //Alice spending on behalf of defaultAccount to give SPEND_AMOUNT amount of MyToken to Bob.
+       
+
+        Vm.Log[] memory entries = vm.getRecordedLogs();
+        //console.log_named_array(entries);
+        
         //ASSERT
+         uint256 currentApproveEventAmt = abi.decode(entries[0].data, (uint256));
+         uint256 currentTransferEventAmt = abi.decode(entries[1].data, (uint256));
+
+        
+
+        assert(currentApproveEventAmt-currentTransferEventAmt ==  myToken.allowance(defaultSender, alice));
+        assert(currentTransferEventAmt == myToken.balanceOf(bob));
+        assert(myToken.balanceOf(bob) == SPEND_AMOUNT);
     }
 
+    function testApproveMinusValue() external{
 
-
+       
+    }
 
 
 }
