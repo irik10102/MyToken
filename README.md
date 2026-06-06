@@ -1,8 +1,8 @@
-# 🪙 OurToken (ERC-20 Token)
+# 🪙 MyToken (ERC-20 Token)
 
 ## Project Description
 
-Developed a custom ERC-20 token named **OurToken** as part of the Cyfrin Updraft Smart Contract Development curriculum using Solidity and Foundry. The project demonstrates the implementation of a fungible token following the ERC-20 standard, leveraging OpenZeppelin's audited smart contract libraries to ensure security, reliability, and compliance with Ethereum token standards.
+Developed a custom ERC-20 token named **MyToken** as part of the Cyfrin Updraft Smart Contract Development curriculum using Solidity and Foundry. The project demonstrates the implementation of a fungible token following the ERC-20 standard, leveraging OpenZeppelin's audited smart contract libraries to ensure security, reliability, and compliance with Ethereum token standards.
 
 The token supports core ERC-20 functionalities such as token transfers, balance tracking, allowances, approvals, and delegated transfers. The project emphasizes smart contract testing, security best practices, and professional development workflows using the Foundry framework.
 
